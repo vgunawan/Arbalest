@@ -1,0 +1,31 @@
+*.rbc
+/.bundle
+.config
+.powenv
+InstalledFiles
+lib/bundler/man
+/log
+/pkg
+rdoc
+/tmp
+/VERSION
+
+# Docker build
+/build
+  
+# Reports
+/spec/reports
+/reports
+/coverage
+
+# YARD artifacts
+.yardoc
+_yardoc
+doc/
+.bin
+
+# Editor files
+*.sublime*
+*.swp
+/.idea
+
