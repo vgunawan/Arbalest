@@ -30,7 +30,6 @@ module Arbalest
 
         it("has first element") do 
           first_key = first_of_jan.to_i
-          p "first key #{first_key}"
           expect(subject.candles[first_key]).to eq(Candlestick.new(o: 170, h: 160, l: 180, c: 175))
         end
       end
