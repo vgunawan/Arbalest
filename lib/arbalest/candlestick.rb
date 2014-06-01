@@ -13,10 +13,16 @@ module Arbalest
       @l = l
       @c = c
       @v = v
+      raise 'open and close must be within low and high' if !valid?
     end
 
     def ==(other)
       o == other.o and h == other.h and l == other.l and c == other.c and v == other.v
+    end
+
+    private
+    def valid?
+      [@o, @c].inject(true) { |memo, v| memo and v <= @h and v >= @l }
     end
   end
 end

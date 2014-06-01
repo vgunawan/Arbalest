@@ -21,8 +21,8 @@ module Arbalest
             list << { 
               timestamp: (first_of_jan + 3600 * i).to_i,
               o: 170 + i, 
-              h: 160 + i, 
-              l: 180 + i, 
+              h: 190 + i, 
+              l: 160 + i, 
               c: 175 + i }
           end
           list
@@ -30,7 +30,7 @@ module Arbalest
 
         it("has first element") do 
           first_key = first_of_jan.to_i
-          expect(subject.candles[first_key]).to eq(Candlestick.new(o: 170, h: 160, l: 180, c: 175))
+          expect(subject.candles[first_key]).to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175))
         end
       end
       
@@ -41,8 +41,8 @@ module Arbalest
             list << {
               timestamp: (first_of_jan + 3600 * i).to_i, 
               o: 170 + i, 
-              h: 160 + i, 
-              l: 180 + i,
+              h: 190 + i, 
+              l: 160 + i,
               c: 175 + i, 
               v: 300 + i }
           end
@@ -51,7 +51,7 @@ module Arbalest
 
         it("has first element") do 
           first_key = first_of_jan.to_i
-          expect(subject.candles[first_key]).to eq(Candlestick.new(o: 170, h: 160, l: 180, c: 175, v: 300))
+          expect(subject.candles[first_key]).to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175, v: 300))
         end
       end
 
