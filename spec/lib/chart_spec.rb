@@ -18,14 +18,20 @@ module Arbalest
         let(:list) do
           list = []
           for i in 0..5 do
-            list << [first_of_jan + 3600 * i, 170 + i, 160 + i , 180 + i, 175 + i]
+            list << { 
+              timestamp: (first_of_jan + 3600 * i).to_i,
+              o: 170 + i, 
+              h: 160 + i, 
+              l: 180 + i, 
+              c: 175 + i }
           end
           list
         end
 
         it("has first element") do 
           first_key = first_of_jan.to_i
-          expect(subject.candles[first_key]).to eq(Candlestick.new(170, 160, 180, 175))
+          p "first key #{first_key}"
+          expect(subject.candles[first_key]).to eq(Candlestick.new(o: 170, h: 160, l: 180, c: 175))
         end
       end
       
@@ -33,14 +39,20 @@ module Arbalest
         let(:list) do
           list = []
           for i in 0..5 do
-            list << [first_of_jan + 3600 * i, 170 + i, 160 + i , 180 + i, 175 + i, 300 + i]
+            list << {
+              timestamp: (first_of_jan + 3600 * i).to_i, 
+              o: 170 + i, 
+              h: 160 + i, 
+              l: 180 + i,
+              c: 175 + i, 
+              v: 300 + i }
           end
           list
         end
 
         it("has first element") do 
           first_key = first_of_jan.to_i
-          expect(subject.candles[first_key]).to eq(Candlestick.new(170, 160, 180, 175, v: 300))
+          expect(subject.candles[first_key]).to eq(Candlestick.new(o: 170, h: 160, l: 180, c: 175, v: 300))
         end
       end
 

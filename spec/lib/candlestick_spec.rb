@@ -7,7 +7,7 @@ module Arbalest
     let(:low)  { 169 }
     let(:close) { 171 }
     let(:volume) { 200 }
-    subject { Candlestick.new(open, high, low, close, v: volume) }
+    subject { Candlestick.new(o: open, h: high, l: low, c: close, v: volume) }
 
     it("#open") { expect(subject.open).to eq(open) }
     it("#high") { expect(subject.high).to eq(high) }
@@ -27,11 +27,12 @@ module Arbalest
       end
 
       context "unspecified volume" do
-        subject { Candlestick.new(open, high, low, close) }
+        subject { Candlestick.new(o: open, h: high, l: low, c: close) }
 
         it("volume") { expect(subject.volume).to be_zero }
       end
     end
-    it("==") { expect(subject).to eq(Candlestick.new(open, high, low, close, v:volume)) }
+
+    it("==") { expect(subject).to eq(Candlestick.new(o: open, h: high, l: low, c: close, v:volume)) }
   end
 end

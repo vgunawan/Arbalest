@@ -11,12 +11,8 @@ module Arbalest
       def from_list(list)
         candles = {}
         list.each do |e| 
-          candles[e.first.to_i] = 
-            if(e.length == 6)
-              Candlestick.new(*e[1..4], v: e.last)
-            else
-              Candlestick.new(*e[1..4])
-            end
+          params = e.select { |k,v| [:o, :h, :l, :c, :v].include? k }
+          candles[e[:timestamp]] = Candlestick.new(params)
         end
 
         self.new(candles)

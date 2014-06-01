@@ -7,7 +7,7 @@ module Arbalest
     alias_method :close, :c
     alias_method :volume, :v
     
-    def initialize(o, h, l, c, v: 0)
+    def initialize(o: 0, h: 0, l: 0, c: 0, v: 0)
       @o = o
       @h = h
       @l = l
