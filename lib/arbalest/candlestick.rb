@@ -14,5 +14,9 @@ module Arbalest
       @c = c
       @v = v
     end
+
+    def ==(other)
+      o == other.o and h == other.h and l == other.l and c == other.c and v == other.v
+    end
   end
 end

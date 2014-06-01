@@ -15,10 +15,23 @@ module Arbalest
     it("#close") { expect(subject.close).to eq(close) }
     it("#volume") { expect(subject.volume).to eq(volume) } 
     
-    context "unspecified volume" do
-      subject { Candlestick.new(open, high, low, close) }
+    describe "#initialize" do
+      context "invalid opens" do
+        it("above high") { fail }
+        it("below low") { fail }
+      end
 
-      it("volume") { expect(subject.volume).to be_zero }
+      context "invalid closes" do
+        it("above high") { fail }
+        it("below low") { fail }
+      end
+
+      context "unspecified volume" do
+        subject { Candlestick.new(open, high, low, close) }
+
+        it("volume") { expect(subject.volume).to be_zero }
+      end
     end
+    it("==") { expect(subject).to eq(Candlestick.new(open, high, low, close, v:volume)) }
   end
 end
