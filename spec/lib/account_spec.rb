@@ -46,6 +46,8 @@ module Arbalest
         end
 
         it "mark the position as close" do
+          expect(subject.close(new_position.id, close_price).status).
+            to be(:close)
         end
 
         it "updates the balance" do
