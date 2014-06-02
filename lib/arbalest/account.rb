@@ -2,7 +2,7 @@ module Arbalest
   class Account
     attr_reader :balance, :positions
     
-    def initialize(balance)
+    def initialize(balance=0)
       @balance = balance
       @positions = []
     end
@@ -10,6 +10,12 @@ module Arbalest
     def open(pair, direction, price, time)
       p = Position.new(pair, direction, price, time)
       @positions << p
+      p
+    end
+
+    def close(position_id, close_price)
+      p = positions.find {|p| p.id == position_id }
+      p.close(close_price)
       p
     end
   end

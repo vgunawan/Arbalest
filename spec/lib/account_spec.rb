@@ -7,37 +7,59 @@ module Arbalest
       expect(subject.balance).to eq(balance)
     end
 
-    describe "open a new position" do
+    describe "position" do
       let(:price) { 0.98432 }
       let(:time) { Time.parse("2014-05-02T00:03:45") }
       let(:new_position) { subject.open(:audusd, :long, price, time) }
-      it "adds a new position as 'open'" do
-        expect(new_position.status).to eq(:open)
-      end
-
-      it "adds the position to the collection" do
-        size = subject.positions.size
+      
+      def have_an_open_position
         new_position
-        expect(subject.positions.size).to eq(size+1)
       end
 
-      it "returns the position instance" do
-        expect(new_position).to be_an_instance_of(Position)
+      describe "#open" do
+
+        it "status is 'open'" do
+          expect(new_position.status).to eq(:open)
+        end
+
+        it "adds to the collection" do
+          size = subject.positions.size
+          have_an_open_position
+          expect(subject.positions.size).to eq(size+1)
+        end
+
+        it "returns the instance" do
+          expect(new_position).to be_an_instance_of(Position)
+        end
+
       end
-    end
 
-    describe "close a position" do
-    end
+      describe "#close" do
+        let(:close_price) { 1.00 }
+        before do
+          have_an_open_position
+        end
 
-    describe "all closed positions" do
-    end
+        it "returns the instance" do
+          expect(subject.close(new_position.id, close_price)).
+            to be_an_instance_of(Position)
+        end
 
-    describe "all open positions" do
+        it "mark the position as close" do
+        end
 
-    end
+        it "updates the balance" do
+        end
 
-    describe "bankrupt" do
+      end
 
+      describe "all closed positions" do
+        it "returns positions" do end
+      end
+
+      describe "all open positions" do
+        it "returns positions" do end
+      end
     end
   end
 end

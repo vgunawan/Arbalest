@@ -20,5 +20,21 @@ module Arbalest
     it("time") { expect(subject.time).to eq(time) }
     it("status") { expect(subject.status).to eq(:open) }
     it("id") { expect(subject.id).to eq(uuid) }
+
+    describe "#close" do
+      let(:closing_price) { 1.00 }
+
+      before do
+        subject.close(closing_price)
+      end
+
+      it "sets status to close" do
+        expect(subject.status).to eq(:close)  
+      end
+
+      it "sets the closing price" do
+        expect(subject.closing_price).to eq(closing_price)
+      end
+    end
   end
 end
