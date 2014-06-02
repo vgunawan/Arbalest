@@ -16,6 +16,9 @@ module Arbalest
       end
 
       it "adds the position to the collection" do
+        size = subject.positions.size
+        new_position
+        expect(subject.positions.size).to eq(size+1)
       end
     end
 
