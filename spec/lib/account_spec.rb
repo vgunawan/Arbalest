@@ -20,6 +20,10 @@ module Arbalest
         new_position
         expect(subject.positions.size).to eq(size+1)
       end
+
+      it "returns the position instance" do
+        expect(new_position).to be_an_instance_of(Position)
+      end
     end
 
     describe "close a position" do
