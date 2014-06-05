@@ -28,9 +28,13 @@ module Arbalest
           list
         end
 
-        it("has first element") do 
-          first_key = first_of_jan.to_i
-          expect(subject.candles[first_key]).to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175))
+        it("first element has timestamp") do 
+          expect(subject.candles.first[:timestamp]).to eq(list.first[:timestamp])
+        end
+        
+        it("first element has a candle") do 
+          expect(subject.candles.first[:candle]).
+            to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175))
         end
       end
       
@@ -49,9 +53,27 @@ module Arbalest
           list
         end
 
-        it("has first element") do 
-          first_key = first_of_jan.to_i
-          expect(subject.candles[first_key]).to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175, v: 300))
+        it("first element has timestamp") do 
+          expect(subject.candles.first[:timestamp]).to eq(list.first[:timestamp])
+        end
+        
+        it("first element has a candle") do 
+          expect(subject.candles.first[:candle]).
+            to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175, v: 300))
+        end
+
+        describe "#at" do
+          it "returns closest previous candle" do
+            expect(subject.at(first_of_jan + 3599)).
+              to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175, v: 300))
+          end
+
+          context "no earlier data" do
+            it "returns nil" do
+              expect(subject.at(first_of_jan - 1)).
+                to be_nil
+            end
+          end
         end
       end
 
