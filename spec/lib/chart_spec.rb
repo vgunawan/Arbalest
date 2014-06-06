@@ -60,6 +60,13 @@ module Arbalest
         expect(subject.at(first_of_jan + 3599)).
           to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175, v: 300))
       end
+      
+      context "most recent" do
+        it "returns the latest" do
+          expect(subject.at(first_of_jan + 3600 * 5)).
+            to eq(Candlestick.new(o: 175, h: 195, l: 165, c: 180, v: 305))
+        end
+      end
 
       context "no earlier data" do
         it "returns nil" do
@@ -69,5 +76,17 @@ module Arbalest
       end
 
     end
+
+    describe "#range" do
+      
+      it "returns candles including the boundary" do
+        expected = [
+          { timestamp: first_of_jan, candle: Candlestick.new(o: 170, h: 190, l: 160, c: 175, v: 300) },
+          { timestamp: first_of_jan + 3600, candle: Candlestick.new(o: 171, h: 191, l: 161, c: 176, v: 301) }
+        ]
+        expect(subject.range(first_of_jan, first_of_jan + 3600).data).to eq(expected)
+      end 
+    end
+
   end
 end
