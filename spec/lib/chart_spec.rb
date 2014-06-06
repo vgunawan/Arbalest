@@ -61,9 +61,16 @@ module Arbalest
           to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175, v: 300))
       end
       
-      context "most recent" do
-        it "returns the latest" do
+      context "exact time" do
+        it "returns the candle" do
           expect(subject.at(first_of_jan + 3600 * 5)).
+            to eq(Candlestick.new(o: 175, h: 195, l: 165, c: 180, v: 305))
+        end
+      end
+
+      context "far in the future" do
+        it "returns the most recent candle" do
+          expect(subject.at(Time.parse("2015-01-01T00:01:00"))).
             to eq(Candlestick.new(o: 175, h: 195, l: 165, c: 180, v: 305))
         end
       end
@@ -72,6 +79,13 @@ module Arbalest
         it "returns nil" do
           expect(subject.at(first_of_jan - 1)).
             to be_nil
+        end
+      end
+
+      context "with no data" do
+        let(:list) { [] }
+        it "returns nil" do
+          expect(subject.at(first_of_jan)).to be_nil
         end
       end
 

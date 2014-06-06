@@ -35,7 +35,7 @@ module Arbalest
         e[:timestamp] > time.to_i
       end
       if i.nil?
-        return prev_i unless prev_i.zero?
+        return prev_i unless prev_i < 0
         return nil
       elsif i.zero?
         return nil
