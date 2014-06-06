@@ -81,10 +81,10 @@ module Arbalest
       
       it "returns candles including the boundary" do
         expected = [
-          { timestamp: first_of_jan, candle: Candlestick.new(o: 170, h: 190, l: 160, c: 175, v: 300) },
-          { timestamp: first_of_jan + 3600, candle: Candlestick.new(o: 171, h: 191, l: 161, c: 176, v: 301) }
+          { timestamp: first_of_jan.to_i, candle: Candlestick.new(o: 170, h: 190, l: 160, c: 175, v: 300) },
+          { timestamp: (first_of_jan + 3600).to_i, candle: Candlestick.new(o: 171, h: 191, l: 161, c: 176, v: 301) }
         ]
-        expect(subject.range(first_of_jan, first_of_jan + 3600).data).to eq(expected)
+        expect(subject.range(first_of_jan, first_of_jan + 3600)).to eq(expected)
       end 
     end
 
