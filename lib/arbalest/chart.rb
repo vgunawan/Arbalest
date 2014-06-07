@@ -8,8 +8,8 @@ module Arbalest
       list.each do |e| 
         params = e.select { |k,v| [:o, :h, :l, :c, :v].include? k }
         @data << { timestamp: e[:timestamp], candle: Candlestick.new(params) }
-        rebuild_index!
       end
+      rebuild_index!
     end
 
     def at(time)
@@ -19,9 +19,10 @@ module Arbalest
     end
 
     def range(from, to)
-      i = nearest_index_at(from)
-      j = nearest_index_at(to)
-      return nil if i.nil? or j.nil?
+      i = nearest_index_at(from) || 0
+      j = nearest_index_at(to) || 0
+
+      return nil if i.nil? and j.nil?
       data[i..j]  
     end
 
