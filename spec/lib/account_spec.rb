@@ -34,27 +34,6 @@ module Arbalest
 
       end
 
-      describe "#close" do
-        let(:close_price) { 1.00 }
-        before do
-          have_an_open_position
-        end
-
-        it "returns the instance" do
-          expect(subject.close(new_position.id, close_price)).
-            to be_an_instance_of(Position)
-        end
-
-        it "mark the position as close" do
-          expect(subject.close(new_position.id, close_price).status).
-            to be(:close)
-        end
-
-        it "updates the balance" do
-        end
-
-      end
-
       describe "all closed positions" do
         it "returns positions" do end
       end

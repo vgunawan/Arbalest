@@ -13,10 +13,5 @@ module Arbalest
       p
     end
 
-    def close(position_id, close_price)
-      p = positions.find {|p| p.id == position_id }
-      p.close(close_price)
-      p
-    end
   end
 end

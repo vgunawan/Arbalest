@@ -5,7 +5,7 @@ require 'arbalest/account'
 require 'arbalest/position'
 require 'arbalest/pilots/base'
 require 'arbalest/pilots/test'
-require 'arbalest/pilots/momentum_trader'
+require 'arbalest/strategies/daily_momentum'
 
 module Arbalest
  
