@@ -6,16 +6,14 @@ module Arbalest
     let(:direction) { :long }
     let(:price) { 1.23425 }
     let(:time) { Time.parse("2014-01-01T00:01:45") }
-    let(:strategy) { Strategies::DailyMomentum }
 
-    subject { Position.new(pair, direction, price, time, strategy) }
+    subject { Position.new(pair, direction, price, time) }
     
     it("pair") { expect(subject.pair).to eq(pair) }
     it("direction") { expect(subject.direction).to eq(direction) }
     it("price") { expect(subject.price).to eq(price) }
     it("time") { expect(subject.time).to eq(time) }
     it("status") { expect(subject.status).to eq(:open) }
-    it("strategy") { expect(subject.strategy).to be(strategy) }
 
     describe "#close" do
       let(:closing_price) { 1.00 }
