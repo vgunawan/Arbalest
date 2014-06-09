@@ -5,7 +5,10 @@ module Arbalest
   describe Chart do
 
     let(:first_of_jan) { Time.parse('2014-01-01T00:00:00') }
-    subject { Chart.new(list) }
+    let(:name) { 'aususd15m' }
+    subject { Chart.new(list, name) }
+
+    it("name") { expect(subject.name).to eq(name) }
 
     context "with no volumes" do
       let(:list) do

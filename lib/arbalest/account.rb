@@ -12,6 +12,18 @@ module Arbalest
       @positions << p
       p
     end
+    
+    def update_positions(data)
+    end
 
+    private
+    def time_limits!
+    end
+
+    def stops!
+    end
+
+    def limits!
+    end
   end
 end

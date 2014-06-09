@@ -1,8 +1,9 @@
 module Arbalest
   class Chart
-    attr_reader :data
+    attr_reader :data, :name
 
-    def initialize(list)
+    def initialize(list, name)
+      @name = name
       @data  = []
       @index = {}
       list.each do |e| 
