@@ -50,18 +50,21 @@ module Arbalest
 
         describe "#chart_updated" do
           let(:day) { 24 * 60 }
+
           let(:data) do 
             d = double('data')
-            allow(d).to receive(:first).
-              and_return( {timestamp: timestamp(0), candle: candle(0) } )
+            allow(d).to receive(:last).
+              and_return({ timestamp: timestamp(23), candlestick: candle(23) })
             d
           end
+
           let(:chart) do
             c = double('audusd')
             allow(c).to receive(:last).with(day).and_return(data)
             allow(c).to receive(:name).and_return('gbpjpy5m')
             c
           end
+
           let(:account) do
             a = double('cfd account')
             allow(a).to receive(:open)
@@ -73,12 +76,20 @@ module Arbalest
             subject.chart_updated
           end
 
-          it("asks chart for the last daily range") do
-            expect(chart).to have_received(:last).with(day)
+          context "with no indicators set" do
+            it("asks chart for the last daily range") do
+              expect(chart).to have_received(:last).with(day)
+            end
+
+            it("does not open a new position ") do
+              expect(account).to_not have_received(:open)
+            end
           end
 
-          it("does not open a new ") do
-            expect(account).to_not have_received(:open).with(day)
+          context "with contradicting indicators" do
+            it "does not open a new position" do
+              expect(account).to_not have_received(:open)
+            end
           end
         end
       end  
