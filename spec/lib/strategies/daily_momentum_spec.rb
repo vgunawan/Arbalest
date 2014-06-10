@@ -1,3 +1,5 @@
+require 'spec_helper.rb'
+
 module Arbalest
   module Strategies
     describe DailyMomentum do
@@ -73,24 +75,46 @@ module Arbalest
 
           before do
             subject.manage(account, chart)
-            subject.chart_updated
           end
 
-          context "with no indicators set" do
+          context "with no order from indicators" do
+            before do
+              Indicators::MomentumA.should_receive(:calculate).and_return(nil)
+              @new_orders = subject.chart_updated
+            end
+
             it("asks chart for the last daily range") do
               expect(chart).to have_received(:last).with(day)
             end
 
-            it("does not open a new position ") do
-              expect(account).to_not have_received(:open)
+            it "returns no new order" do
+              expect(@new_orders).to be_nil
             end
           end
 
-          context "with contradicting indicators" do
-            it "does not open a new position" do
-              expect(account).to_not have_received(:open)
+          context "with new order from indicators" do
+            let(:short_level) { 91.32 }
+            let(:short_order) { { short: short_level } }
+
+            before do
+              Indicators::MomentumA.should_receive(:calculate).and_return(short_order)
+              @new_orders = subject.chart_updated
+            end
+
+            it 'returns new short order' do
+              expect(@new_orders).to eq({
+                price: {
+                  long: nil,
+                  short: short_level
+                },
+                time_limit: 8 * 60,
+                limit: limit_h,
+                stop: stop,
+                trail: trail
+              })
             end
           end
+
         end
       end  
     end

@@ -21,28 +21,36 @@ module Arbalest
         consider_new_position(chart.last(day))
       end
 
+      class << self
+        def indicators
+          @indicators ||= [
+            Indicators::MomentumA
+          ]
+        end
+      end
+
       private
+      def hours
+        60
+      end
+
       def day
-        @day ||= 24 * 60
+        24 * hours
+      end
+
+      def eight_hours
+        8 * hours
       end
 
       def consider_new_position(data)
-        suggestions = indicators.map do |i|
+        suggestions = DailyMomentum.indicators.map do |i|
           i.calculate(data, signal_pips)
-        end.compact!
+        end.compact
 
         if valid?(suggestions)
-          return orders_to_open(suggestions)
+          return order_to_open(suggestions)
         end
         return nil
-      end
-
-      def indicators
-        @indicators ||= [
-          Indicators::MomentumA,
-          Indicators::MomentumB,
-          Indicators::MomentumC
-        ]
       end
 
       def valid?(suggestions)
@@ -54,10 +62,10 @@ module Arbalest
         s = suggestions.first
         { 
           price: { 
-            long: s.long,
-            short: s.short,
+            long: s[:long],
+            short: s[:short],
           },
-          time_limit: one_day,
+          time_limit: eight_hours,
           limit: @limit_h,
           stop: @stop,
           trail: @trail
