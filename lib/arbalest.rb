@@ -5,11 +5,10 @@ require 'arbalest/account'
 require 'arbalest/position'
 require 'arbalest/order'
 require 'arbalest/pilots/base'
-require 'arbalest/pilots/test'
+require 'arbalest/pilots/sagara'
 require 'arbalest/strategies/daily_momentum'
 require 'arbalest/indicators/momentum_a'
-require 'arbalest/indicators/momentum_b'
-require 'arbalest/indicators/momentum_c'
+require 'arbalest/parsers/mt4'
 
 module Arbalest
  

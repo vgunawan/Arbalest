@@ -5,14 +5,13 @@ module Arbalest
     describe "#start" do
       
       context "with no chart data" do
-        
-        let(:balance) { 1000 }
+        let(:balance) { 1000 }  
         let(:account) { Account.new(balance) }
         let(:data) { [] }
-        let(:pilot) { Pilots::Test }
-        subject { Simulator.new(account, data, pilot) }
+        let(:pilot) { Pilots::Sagara }
+        subject { Simulator.new(account, pilot) }
         
-        before { subject.start }
+        before { subject.play }
 
         it "account balance remains the same" do
           expect(account.balance).to eq(balance)
@@ -40,9 +39,8 @@ module Arbalest
         let(:balance) { 1000 }
         let(:account) { Account.new(balance) }
         let(:pilot) { Pilots::Test }
-        subject { Simulator.new(account, data, pilot) }
 
-
+        subject { Simulator.new(account, pilot) }
       end
     end
   end

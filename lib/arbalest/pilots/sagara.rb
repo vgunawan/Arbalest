@@ -1,4 +1,4 @@
 module Arbalest::Pilots
-  class Test
+  class Sagara
   end
 end
