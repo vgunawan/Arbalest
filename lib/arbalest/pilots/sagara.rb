@@ -10,7 +10,7 @@ module Arbalest::Pilots
     def react(chart)
       order = strategy.process(chart)
       unless order.nil?
-        simulator.place_order(order)
+        simulator.shoot(order)
       end
     end
   end

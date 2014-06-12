@@ -15,7 +15,7 @@ module Arbalest::Pilots
       let(:order) { double('order') }
 
       before do
-        simulator.stub(:place_order).with(order)
+        simulator.stub(:shoot).with(order)
       end
 
       context 'strategy returns no order' do
@@ -29,7 +29,7 @@ module Arbalest::Pilots
         end
 
         it 'does not issue new order' do
-          expect(simulator).to_not have_received(:place_order)
+          expect(simulator).to_not have_received(:shoot)
         end
       end
 
@@ -40,7 +40,7 @@ module Arbalest::Pilots
         end
 
         it 'issue a new order' do
-          expect(simulator).to have_received(:place_order).with(order)
+          expect(simulator).to have_received(:shoot).with(order)
         end
       end
     end
