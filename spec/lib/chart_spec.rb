@@ -97,7 +97,6 @@ module Arbalest
     end
 
     describe "#range" do
-      
       it "returns candles including the boundary" do
         expected = [
           { timestamp: first_of_jan.to_i, candle: first_candle },
@@ -145,6 +144,28 @@ module Arbalest
           expect(subject.last(hour)).to eq(
             [{ timestamp: fifth_candle_timestamp.to_i, candle: fifth_candle}, 
              { timestamp: last_candle_timestamp.to_i, candle: last_candle}])
+        end
+      end
+    end
+
+    describe "#replay" do
+      context 'with no block given' do
+        it 'raises error' do
+          expect{subject.replay}.to raise_error
+        end
+      end
+
+      context 'block is given' do
+        before do
+          subject.data.stub(:each)
+        end
+
+        it 'does not raise error' do
+          expect{subject.replay{ }}.to_not raise_error 
+        end
+
+        it 'iterates through the data and pass it to the block' do
+          expect(subject.data).to have_received(:each)
         end
       end
     end

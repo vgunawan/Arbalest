@@ -35,6 +35,10 @@ module Arbalest
       from = distance.nil? ? to : to - distance
       range(from, to)
     end
+    
+    def replay(options=nil, &block)
+      raise 'incorrect usage, block is needed' unless block_given?
+    end
 
     private
     #assuming data is sorted
