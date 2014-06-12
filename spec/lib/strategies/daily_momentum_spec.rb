@@ -41,16 +41,7 @@ module Arbalest
           Time.parse("2014-01-01T:13:00:00").to_i + seed * 3600
         end
 
-        describe "#manage" do
-          before do
-            subject.manage(account, chart)
-          end
-
-          it("account") { expect(subject.account).to eq(account) }
-          it("chart") { expect(subject.chart).to eq(chart) }
-        end
-
-        describe "#chart_updated" do
+        describe "#process" do
           let(:day) { 24 * 60 }
 
           let(:data) do 
@@ -73,14 +64,10 @@ module Arbalest
             a
           end
 
-          before do
-            subject.manage(account, chart)
-          end
-
           context "with no order from indicators" do
             before do
               Indicators::MomentumA.should_receive(:calculate).and_return(nil)
-              @new_orders = subject.chart_updated
+              @new_orders = subject.process(chart)
             end
 
             it("asks chart for the last daily range") do
@@ -98,7 +85,7 @@ module Arbalest
 
             before do
               Indicators::MomentumA.should_receive(:calculate).and_return(short_order)
-              @new_orders = subject.chart_updated
+              @new_orders = subject.process(chart)
             end
 
             it 'returns new short order' do

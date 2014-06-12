@@ -2,7 +2,6 @@ module Arbalest
   module Strategies
     class DailyMomentum
       attr_reader :stop, :limit_l, :limit_h, :trail, :signal_pips
-      attr_reader :account, :chart
 
       def initialize(stop: 15, limit_l: 15, limit_h: 30, signal_pips: 40, trail: 10)
         @stop = stop
@@ -12,12 +11,7 @@ module Arbalest
         @trail = trail
       end
 
-      def manage(account, chart)
-        @account = account
-        @chart = chart
-      end
-
-      def chart_updated
+      def process(chart)
         consider_new_position(chart.last(day))
       end
 
