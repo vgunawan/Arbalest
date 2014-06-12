@@ -18,9 +18,13 @@ module Arbalest
     end
 
     def play
+      chart.replay do |data|
+        pilot.react(data)
+      end
     end
 
-    def stop
+    def shoot(order)
+      account.open(order)
     end
   end
 end
