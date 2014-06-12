@@ -1,29 +1,15 @@
 module Arbalest
   class Account
-    attr_reader :balance, :positions
+    attr_reader :balance, :positions, :working_orders
     
     def initialize(balance=0)
       @balance = balance
+      @working_orders = []
       @positions = []
     end
 
-    def open(pair, direction, price, time)
-      p = Position.new(pair, direction, price, time)
-      @positions << p
-      p
-    end
-    
-    def update_positions(data)
-    end
-
-    private
-    def time_limits!
-    end
-
-    def stops!
-    end
-
-    def limits!
+    def open(order)
+      @working_orders << order
     end
   end
 end
