@@ -38,6 +38,11 @@ module Arbalest
     
     def replay(options=nil, &block)
       raise 'incorrect usage, block is needed' unless block_given?
+      new_chart = Chart.new([], name)
+      data.each do |d|
+        new_chart << d
+        yield new_chart
+      end
     end
 
     def <<(other)

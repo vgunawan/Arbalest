@@ -156,16 +156,26 @@ module Arbalest
       end
 
       context 'block is given' do
+        let(:new_chart) { double('new chart') }
+        let(:single_data) { double('single data') }
+
         before do
-          subject.data.stub(:each)
+          allow(new_chart).to receive(:<<)
+          subject.data.stub(:each).and_yield(single_data)
+          Chart.stub(:new).and_return(new_chart)
         end
 
         it 'does not raise error' do
           expect{subject.replay{ }}.to_not raise_error 
         end
 
-        it 'iterates through the data and pass it to the block' do
-          expect(subject.data).to have_received(:each)
+        it 'appends new_chart with each data' do
+          subject.replay {}
+          expect(new_chart).to have_received(:<<).with(single_data)
+        end
+
+        it 'yield every data to the given block' do
+          expect { |b| subject.replay(&b) }.to yield_with_args
         end
       end
     end
