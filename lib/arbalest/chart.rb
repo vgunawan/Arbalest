@@ -40,6 +40,18 @@ module Arbalest
       raise 'incorrect usage, block is needed' unless block_given?
     end
 
+    def <<(other)
+      other_data = 
+        if other.instance_of?(Chart)
+          other.data
+        elsif other.instance_of?(Array)
+          other
+        else
+          []
+        end
+      data << other_data
+    end
+
     private
     #assuming data is sorted
     def nearest_index_at(time)

@@ -169,5 +169,50 @@ module Arbalest
         end
       end
     end
+
+    describe '#<<' do
+      let (:another_chart) { double('another chart') }
+      let (:another_data) { double('another data') }
+      let (:data) { subject.data }
+
+      before do
+        allow(data).to receive(:<<)
+        another_chart.stub(:instance_of?).with(Chart).and_return(true)
+        another_chart.stub(:data).and_return(another_data)
+      end
+
+      it 'appends the internal data' do 
+        subject << another_chart
+        expect(data).to have_received(:<<).with(another_data)
+      end
+
+      context 'with an array of data' do
+        let (:another_data) { double('an array') }
+
+        before do
+          another_data.stub(:instance_of?).with(Chart).and_return(false)
+          another_data.stub(:instance_of?).with(Array).and_return(true)
+          subject << another_data
+        end
+
+        it 'appends the internal data' do
+          expect(data).to have_received(:<<).with(another_data)
+        end
+      end
+
+      context 'with unsupported data' do 
+        let (:another_data) { double('unsupported type') }
+
+        before do
+          another_data.stub(:instance_of?).with(Chart).and_return(false)
+          another_data.stub(:instance_of?).with(Array).and_return(false)
+        end
+
+        it 'appends with empty array' do
+          subject << another_data
+          expect(data).to have_received(:<<).with([])
+        end
+      end
+    end
   end
 end
