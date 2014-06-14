@@ -20,6 +20,7 @@ module Arbalest
     def play
       chart.replay do |data|
         pilot.react(data)
+        account.manage_positions(data)
       end
     end
 

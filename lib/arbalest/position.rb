@@ -1,12 +1,12 @@
 module Arbalest
   class Position
     attr_reader :pair, :direction, :closing_price
-    attr_reader :price, :time, :status, :strategy
+    attr_reader :opening_price, :time, :status, :strategy
     
-    def initialize(pair, direction, price, time)
+    def initialize(pair, direction, opening_price, time)
       @pair = pair
       @direction = direction
-      @price = price
+      @opening_price = opening_price
       @time = time
       @status = :open
     end

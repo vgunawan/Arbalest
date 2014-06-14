@@ -52,6 +52,7 @@ module Arbalest
         subject.stub(:chart).and_return(chart)
         chart.stub(:replay).and_yield(data)
         pilot.stub(:react)
+        allow(account).to receive(:manage_positions).with(data)
         subject.play
       end
 
@@ -64,6 +65,7 @@ module Arbalest
       end
 
       it 'expect the account to manage any open positions' do
+        expect(account).to have_received(:manage_positions)
       end
     end
   end
