@@ -58,6 +58,7 @@ module Arbalest
         context 'nothing hit' do
           before do
             allow(open_position).to receive(:limit_hit?).and_return(false)
+            allow(open_position).to receive(:stop_hit?).and_return(false)
             subject.manage_positions(chart)
           end
 
@@ -78,7 +79,25 @@ module Arbalest
             expect(open_position).to have_received(:close).with(:limit_hit, closing_price)
           end
 
-          it 'moves the position into historical' do
+          it 'moves the position to history' do
+            expect(history.first).to be(open_position)
+          end
+        end
+
+        context 'stop hit' do
+          before do
+            allow(open_position).to receive(:limit_hit?).and_return(false)
+            allow(open_position).to receive(:stop_hit?).and_return(true)
+            allow(open_position).to receive(:close).with(:stop_hit, closing_price)
+            allow(open_position).to receive(:stop).and_return(closing_price)
+            subject.manage_positions(chart)
+          end
+
+          it 'close the position' do
+            expect(open_position).to have_received(:close).with(:stop_hit, closing_price)
+          end
+
+          it 'moves the position to history' do
             expect(history.first).to be(open_position)
           end
         end

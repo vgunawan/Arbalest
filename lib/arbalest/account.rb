@@ -26,6 +26,10 @@ module Arbalest
           pos.close(:limit_hit, pos.limit)
           history << pos
           return true
+        elsif pos.stop_hit?(data[:cadlestick])
+          pos.close(:stop_hit, pos.stop)
+          history << pos
+          return true
         end
         false
       end
