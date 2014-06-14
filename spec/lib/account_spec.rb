@@ -59,11 +59,20 @@ module Arbalest
           before do
             allow(open_position).to receive(:limit_hit?).and_return(false)
             allow(open_position).to receive(:stop_hit?).and_return(false)
+            allow(open_position).to receive(:update_trail_stop)
             subject.manage_positions(chart)
           end
 
           it 'selects the position that matches the pair' do
             expect(positions).to have_received(:delete_if)
+          end
+
+          it 'updates the trail stop' do
+            expect(open_position).to have_received(:update_trail_stop)
+          end
+
+          it 'does not put the positin to history' do
+            expect(history).to_not receive(:<<)
           end
         end
 

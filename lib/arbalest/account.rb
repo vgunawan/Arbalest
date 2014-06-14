@@ -30,8 +30,10 @@ module Arbalest
           pos.close(:stop_hit, pos.stop)
           history << pos
           return true
+        else
+          pos.update_trail_stop(data[:candlestick])
+          return false
         end
-        false
       end
     end
   end
