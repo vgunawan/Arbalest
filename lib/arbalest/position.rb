@@ -18,9 +18,9 @@ module Arbalest
     end
 
     def close_if_hit!(data)
-      if data.include?(limit)
+      if data.hit?(limit)
         close(:limit_hit, limit)
-      elsif data.include?(stop)
+      elsif data.hit?(stop)
         close(:stop_hit, stop)
       elsif data.closed_after?(time_limit)
         close(:time_limit, data.close)

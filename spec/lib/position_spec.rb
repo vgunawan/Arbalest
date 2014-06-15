@@ -44,7 +44,7 @@ module Arbalest
         let(:one_pip) { 0.0001 }
 
         before do
-          allow(data).to receive(:include?).with(expected_limit).and_return(true)
+          allow(data).to receive(:hit?).with(expected_limit).and_return(true)
           allow(order).to receive(:limit).and_return(limit)
           allow(pair).to receive(:one_pip).and_return(one_pip)
           subject.stub(:close)
@@ -64,8 +64,8 @@ module Arbalest
         let(:one_pip) { 0.0001 }
 
         before do
-          allow(data).to receive(:include?).with(limit).and_return(false)
-          allow(data).to receive(:include?).with(expected_stop).and_return(true)
+          allow(data).to receive(:hit?).with(limit).and_return(false)
+          allow(data).to receive(:hit?).with(expected_stop).and_return(true)
           allow(order).to receive(:stop).and_return(stop)
           allow(pair).to receive(:one_pip).and_return(one_pip)
           subject.stub(:limit).and_return(limit)
@@ -87,8 +87,8 @@ module Arbalest
         let(:position_time_limit) { time + time_limit }
 
         before do
-          allow(data).to receive(:include?).with(limit).and_return(false)
-          allow(data).to receive(:include?).with(stop).and_return(false)
+          allow(data).to receive(:hit?).with(limit).and_return(false)
+          allow(data).to receive(:hit?).with(stop).and_return(false)
           allow(data).to receive(:closed_after?).
             with(position_time_limit).and_return(true)
           allow(data).to receive(:close).and_return(closing_price)
