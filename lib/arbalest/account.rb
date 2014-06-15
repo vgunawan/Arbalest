@@ -22,12 +22,7 @@ module Arbalest
       positions.delete_if do |pos|
         if pos.pair != pair
           return false
-        elsif pos.limit_hit?(data[:candlestick])
-          pos.close(:limit_hit, pos.limit)
-          history << pos
-          return true
-        elsif pos.stop_hit?(data[:cadlestick])
-          pos.close(:stop_hit, pos.stop)
+        elsif pos.close_if_hit!(data)
           history << pos
           return true
         else

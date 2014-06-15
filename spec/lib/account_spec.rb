@@ -32,9 +32,10 @@ module Arbalest
         let(:open_position_pair) { pair }
         let(:open_position) { double('open position', pair: open_position_pair) }
         let(:closing_price) { double('100') }
+        let(:last_candle) { double('candlestick') }
         let(:last_data) do
           {
-            :candlestick => double('candlestick')
+            :candlestick => last_candle
           }
         end
         let(:chart) { double('chart', pair: pair, last: last_data) }
@@ -45,20 +46,19 @@ module Arbalest
 
         context 'different pair' do
           let(:open_position_pair) { double('gbpjpy') }
-
+          
           before do
-            allow(open_position).to receive(:limit_hit?).and_return(false)
+            allow(open_position).to receive(:close_if_hit!).and_return(false)
           end
 
           it 'does nothing' do
-            expect(open_position).to_not have_received(:limit_hit?)
+            expect(open_position).to_not have_received(:close_if_hit!)
           end
         end
 
         context 'nothing hit' do
           before do
-            allow(open_position).to receive(:limit_hit?).and_return(false)
-            allow(open_position).to receive(:stop_hit?).and_return(false)
+            allow(open_position).to receive(:close_if_hit!).and_return(false)
             allow(open_position).to receive(:update_trail_stop)
             subject.manage_positions(chart)
           end
@@ -71,42 +71,22 @@ module Arbalest
             expect(open_position).to have_received(:update_trail_stop)
           end
 
-          it 'does not put the positin to history' do
+          it 'does not put the position to history' do
             expect(history).to_not receive(:<<)
           end
         end
 
-        context 'limit hit' do
+        context 'position closed' do
           before do
-            allow(open_position).to receive(:limit_hit?).and_return(true)
-            allow(open_position).to receive(:close).with(:limit_hit, closing_price)
-            allow(open_position).to receive(:limit).and_return(closing_price)
+            allow(open_position).to receive(:close_if_hit!).with(last_data).and_return(true)
             subject.manage_positions(chart)
           end
 
-          it 'close the position' do
-            expect(open_position).to have_received(:close).with(:limit_hit, closing_price)
+          it 'calls the function to close' do
+            expect(open_position).to have_received(:close_if_hit!).with(last_data)
           end
 
-          it 'moves the position to history' do
-            expect(history.first).to be(open_position)
-          end
-        end
-
-        context 'stop hit' do
-          before do
-            allow(open_position).to receive(:limit_hit?).and_return(false)
-            allow(open_position).to receive(:stop_hit?).and_return(true)
-            allow(open_position).to receive(:close).with(:stop_hit, closing_price)
-            allow(open_position).to receive(:stop).and_return(closing_price)
-            subject.manage_positions(chart)
-          end
-
-          it 'close the position' do
-            expect(open_position).to have_received(:close).with(:stop_hit, closing_price)
-          end
-
-          it 'moves the position to history' do
+          it 'position is archived' do
             expect(history.first).to be(open_position)
           end
         end

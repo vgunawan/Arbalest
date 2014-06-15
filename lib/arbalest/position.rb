@@ -1,19 +1,39 @@
 module Arbalest
   class Position
-    attr_reader :pair, :direction, :closing_price
+    attr_reader :pair, :direction, :closing_price, :order
     attr_reader :opening_price, :time, :status, :strategy
     
-    def initialize(pair, direction, opening_price, time)
+    def initialize(pair, direction, opening_price, time, order)
       @pair = pair
       @direction = direction
       @opening_price = opening_price
       @time = time
       @status = :open
+      @order = order
     end
 
-    def close(closing_price)
-      @status = :close
+    def close(status, closing_price)
+      @status = status
       @closing_price = closing_price
+    end
+
+    def close_if_hit!(data)
+      if data.include?(limit)
+        close(:limit_hit, limit)
+      elsif data.include?(stop)
+        close(:stop_hit, stop)
+      end
+    end
+
+    private
+    def limit
+      op = (direction == :long) ? :+ : :-
+      opening_price.send(op, pair.one_pip * order.limit)
+    end
+
+    def stop
+      op = (direction == :long) ? :- : :+
+      opening_price.send(op, pair.one_pip * order.stop)
     end
   end
 end
