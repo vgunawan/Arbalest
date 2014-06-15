@@ -22,6 +22,8 @@ module Arbalest
         close(:limit_hit, limit)
       elsif data.include?(stop)
         close(:stop_hit, stop)
+      elsif data.closed_after?(time_limit)
+        close(:time_limit, data.close)
       end
     end
 
@@ -34,6 +36,10 @@ module Arbalest
     def stop
       op = (direction == :long) ? :- : :+
       opening_price.send(op, pair.one_pip * order.stop)
+    end
+
+    def time_limit
+      time + order.time_limit
     end
   end
 end

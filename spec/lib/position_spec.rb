@@ -77,40 +77,32 @@ module Arbalest
           expect(subject).to have_received(:close).with(:stop_hit, expected_stop)
         end
       end
-#      context 'stop hit' do
-#        before do
-#          allow(open_position).to receive(:limit_hit?).and_return(false)
-#          allow(open_position).to receive(:stop_hit?).and_return(true)
-#          allow(open_position).to receive(:close).with(:stop_hit, closing_price)
-#          allow(open_position).to receive(:stop).and_return(closing_price)
-#          subject.manage_positions(chart)
-#        end
-#
-#        it 'close the position' do
-#          expect(open_position).to have_received(:close).with(:stop_hit, closing_price)
-#        end
-#
-#        it 'moves the position to history' do
-#          expect(history.first).to be(open_position)
-#        end
-#      end
-#
-#      context 'time limit hit' do
-#        before do
-#          allow(open_position).to receive(:limit_hit?).and_return(false)
-#          allow(open_position).to receive(:stop_hit?).and_return(false)
-#          allow(open_position).to receive(:time_limit_hit?).and_return(true)
-#          allow(last_candle).to receive(:c).and_return(closing_price)
-#          allow(open_position).to receive(:close).with(:time_limit, closing_price)
-#        end
-#
-#        it 'close the position' do
-#          expect(open_position).to have_received(:close).with(:time_limit, closing_price)
-#        end
-#      end
-#
-#      context 'not hit' do
-#      end
+
+      context 'time limit hit' do
+        let(:stop) { double('stop') }
+        let(:limit) { double('limit') }
+        let(:closing_price) { double('closing price') }
+        let(:candlestick) { double('candlestick', c: closing_price) }
+        let(:time_limit) { 3600 * 3 }
+        let(:position_time_limit) { time + time_limit }
+
+        before do
+          allow(data).to receive(:include?).with(limit).and_return(false)
+          allow(data).to receive(:include?).with(stop).and_return(false)
+          allow(data).to receive(:closed_after?).
+            with(position_time_limit).and_return(true)
+          allow(data).to receive(:close).and_return(closing_price)
+          allow(order).to receive(:time_limit).and_return(time_limit)
+          subject.stub(:limit).and_return(limit)
+          subject.stub(:stop).and_return(stop)
+          subject.stub(:close)
+          subject.close_if_hit!(data)
+        end
+
+        it 'close the position' do
+          expect(subject).to have_received(:close).with(:time_limit, closing_price)
+        end
+      end
     end
   end
 end
