@@ -47,7 +47,7 @@ module Arbalest
     end
 
     def elapsed?(time)
-      data[-1][:timestamp] + interval > time.to_i
+      data.last[:timestamp] + interval > time.to_i
     end
 
     def <<(other)
