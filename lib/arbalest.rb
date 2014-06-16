@@ -1,4 +1,5 @@
 require 'arbalest/candlestick'
+require 'arbalest/data'
 require 'arbalest/chart'
 require 'arbalest/simulator'
 require 'arbalest/account'

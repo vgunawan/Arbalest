@@ -24,7 +24,7 @@ module Arbalest
       context "with enough data to start" do
         let(:balance) { 1000 }
         let(:account) { Account.new(balance) }
-        let(:pilot) { Pilots::Test }
+        let(:pilot) { Pilots::Sagara }
 
         subject { Simulator.new(account, pilot) }
       end
