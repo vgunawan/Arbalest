@@ -36,6 +36,7 @@ module Arbalest
 
     describe '#close_if_hit!' do
       let(:data) { double('data') } 
+      let(:chart) { double('chart', last: [data]) }
 
       context 'limit hit' do
         let(:limit) { 30 }
@@ -48,7 +49,7 @@ module Arbalest
           allow(order).to receive(:limit).and_return(limit)
           allow(pair).to receive(:one_pip).and_return(one_pip)
           subject.stub(:close)
-          subject.close_if_hit!(data)
+          subject.close_if_hit!(chart)
         end
 
         it 'close the position' do
@@ -70,7 +71,7 @@ module Arbalest
           allow(pair).to receive(:one_pip).and_return(one_pip)
           subject.stub(:limit).and_return(limit)
           subject.stub(:close)
-          subject.close_if_hit!(data)
+          subject.close_if_hit!(chart)
         end
 
         it 'close the position' do
@@ -89,14 +90,14 @@ module Arbalest
         before do
           allow(data).to receive(:hit?).with(limit).and_return(false)
           allow(data).to receive(:hit?).with(stop).and_return(false)
-          allow(data).to receive(:closed_after?).
+          allow(chart).to receive(:elapsed?).
             with(position_time_limit).and_return(true)
           allow(data).to receive(:close).and_return(closing_price)
           allow(order).to receive(:time_limit).and_return(time_limit)
           subject.stub(:limit).and_return(limit)
           subject.stub(:stop).and_return(stop)
           subject.stub(:close)
-          subject.close_if_hit!(data)
+          subject.close_if_hit!(chart)
         end
 
         it 'close the position' do

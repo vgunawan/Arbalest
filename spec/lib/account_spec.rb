@@ -38,7 +38,7 @@ module Arbalest
             :candlestick => last_candle
           }
         end
-        let(:chart) { double('chart', pair: pair, last: last_data) }
+        let(:chart) { double('chart', pair: pair, last: [last_data]) }
 
         before do
           positions.stub(:delete_if).and_yield(open_position).and_return([open_position])
@@ -78,12 +78,12 @@ module Arbalest
 
         context 'position closed' do
           before do
-            allow(open_position).to receive(:close_if_hit!).with(last_data).and_return(true)
+            allow(open_position).to receive(:close_if_hit!).with(chart).and_return(true)
             subject.manage_positions(chart)
           end
 
           it 'calls the function to close' do
-            expect(open_position).to have_received(:close_if_hit!).with(last_data)
+            expect(open_position).to have_received(:close_if_hit!).with(chart)
           end
 
           it 'position is archived' do

@@ -14,19 +14,19 @@ module Arbalest
     end
 
     def manage_positions(chart)
-      manage_existings(chart.last, chart.pair)
+      manage_existings(chart)
     end
 
     private
-    def manage_existings(data, pair)
+    def manage_existings(chart)
       positions.delete_if do |pos|
-        if pos.pair != pair
+        if pos.pair != chart.pair
           return false
-        elsif pos.close_if_hit!(data)
+        elsif pos.close_if_hit!(chart)
           history << pos
           return true
         else
-          pos.update_trail_stop(data[:candlestick])
+          pos.update_trail_stop(chart)
           return false
         end
       end

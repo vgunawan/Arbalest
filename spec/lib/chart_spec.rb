@@ -5,8 +5,9 @@ module Arbalest
   describe Chart do
 
     let(:first_of_jan) { Time.parse('2014-01-01T00:00:00') }
-    let(:name) { 'aususd15m' }
-    subject { Chart.new(list, name) }
+    let(:name) { :audusd }
+    let(:interval) { 3600 }
+    subject { Chart.new(list, name, interval) }
 
     it("name") { expect(subject.name).to eq(name) }
 
@@ -221,6 +222,24 @@ module Arbalest
         it 'appends with empty array' do
           subject << another_data
           expect(data).to have_received(:<<).with([])
+        end
+      end
+    end
+
+    describe '#elapsed?' do
+      context 'in the future' do
+        let(:future) { Time.parse('2014-01-01T07:00') }
+
+        it 'returns false' do
+          expect(subject.elapsed?(future)).to be_false
+        end
+      end
+
+      context 'in the past' do
+        let(:past) { Time.parse('2014-01-01T06:59') }
+
+        it 'return true' do
+          expect(subject.elapsed?(past)).to be_false
         end
       end
     end

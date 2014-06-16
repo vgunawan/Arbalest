@@ -6,7 +6,9 @@ module Arbalest
     let(:pilot) { double('Sagara') }
     let(:account) { double('cfd_account') }
     let(:path) { 'somepath' }
-    let(:data) { double('chartdata') }
+    let(:data0) { { timestamp: 0 } }
+    let(:data1) { { timestamp: 900} }
+    let(:interval) { 15 * 60 }
     let(:csv) { double('csv') }
     let(:chartname) { 'gbpjpy15m' }
     let(:chart) { double('chart') }
@@ -14,9 +16,9 @@ module Arbalest
     subject { Simulator.new(pilot, account) }
 
     def setup_simulator
-      CSV.stub(:foreach).with(path).and_yield(csv)
-      Parsers::MT4.stub(:parse).and_return(data)
-      Chart.stub(:new).with([data], chartname).and_return(chart)
+      CSV.stub(:foreach).with(path).and_yield(csv).and_yield(csv)
+      Parsers::MT4.stub(:parse).and_return(data0, data1)
+      Chart.stub(:new).with([data0, data1], chartname, interval).and_return(chart)
     end
 
     describe "#load" do
@@ -30,7 +32,7 @@ module Arbalest
       end
 
       it 'sets a new chart based on the csv' do
-        expect(Chart).to have_received(:new).with([data], chartname)
+        expect(Chart).to have_received(:new).with([data0, data1], chartname, interval)
       end
     end
 
@@ -48,6 +50,7 @@ module Arbalest
     end
 
     describe "#play" do
+      let(:data) { double('data') }
       before do
         subject.stub(:chart).and_return(chart)
         chart.stub(:replay).and_yield(data)

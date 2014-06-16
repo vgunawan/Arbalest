@@ -1,10 +1,11 @@
 module Arbalest
   class Chart
-    attr_reader :data, :name
+    attr_reader :data, :name, :interval
 
-    def initialize(list, name)
+    def initialize(list, name, interval)
       @name = name
       @data  = []
+      @interval = interval
       @index = {}
       list.each do |e| 
         params = e.select { |k,v| [:o, :h, :l, :c, :v].include? k }
@@ -38,11 +39,15 @@ module Arbalest
     
     def replay(options=nil, &block)
       raise 'incorrect usage, block is needed' unless block_given?
-      new_chart = Chart.new([], name)
+      new_chart = Chart.new([], name, interval)
       data.each do |d|
         new_chart << d
         yield new_chart
       end
+    end
+
+    def elapsed?(time)
+      data[-1][:timestamp] + interval > time.to_i
     end
 
     def <<(other)

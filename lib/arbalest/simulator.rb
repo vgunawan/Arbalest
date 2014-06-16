@@ -14,7 +14,7 @@ module Arbalest
       CSV.foreach(file_path) do |row|
         data << Parsers::MT4.parse(row)
       end
-      @chart = Chart.new(data, chart_name)
+      @chart = Chart.new(data, chart_name, interval(data))
     end
 
     def play
@@ -26,6 +26,12 @@ module Arbalest
 
     def shoot(order)
       account.open(order)
+    end
+
+    private
+    def interval(data)
+      return nil if data.size < 2
+      data[1][:timestamp] - data[0][:timestamp]
     end
   end
 end

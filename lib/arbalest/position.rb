@@ -17,13 +17,14 @@ module Arbalest
       @closing_price = closing_price
     end
 
-    def close_if_hit!(data)
-      if data.hit?(limit)
+    def close_if_hit!(chart)
+      last_data = chart.last[0]
+      if last_data.hit?(limit)
         close(:limit_hit, limit)
-      elsif data.hit?(stop)
+      elsif last_data.hit?(stop)
         close(:stop_hit, stop)
-      elsif data.closed_after?(time_limit)
-        close(:time_limit, data.close)
+      elsif chart.elapsed?(time_limit)
+        close(:time_limit, last_data.close)
       end
     end
 
