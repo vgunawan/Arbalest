@@ -13,7 +13,7 @@ module Arbalest
     it('candlestick') { expect(subject.candlestick).to eq(candlestick) }
 
     describe '#hit' do
-      context 'with price out of the range' do
+      context 'with price out of the range high' do
         let(:price) { 200 }
 
         it 'returns false' do
@@ -21,8 +21,24 @@ module Arbalest
         end
       end
 
-      context 'with price in the range' do
+      context 'with price out of the range low' do
+        let(:price) { 20 }
+
+        it 'returns false' do
+          expect(subject.hit(price)).to be_false
+        end
+      end
+
+      context 'with price within the range high' do
         let(:price) { 103 }
+
+        it 'returns true' do
+          expect(subject.hit(price)).to be_true
+        end
+      end
+
+      context 'with price within the range low' do
+        let(:price) { 98 }
 
         it 'returns true' do
           expect(subject.hit(price)).to be_true
