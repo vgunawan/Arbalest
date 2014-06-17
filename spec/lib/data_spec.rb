@@ -12,12 +12,12 @@ module Arbalest
     it('timestamp') { expect(subject.timestamp).to eq(timestamp) }
     it('candlestick') { expect(subject.candlestick).to eq(candlestick) }
 
-    describe '#hit' do
+    describe '#hit?' do
       context 'with price out of the range high' do
         let(:price) { 200 }
 
         it 'returns false' do
-          expect(subject.hit(price)).to be_false
+          expect(subject.hit?(price)).to be_false
         end
       end
 
@@ -25,7 +25,7 @@ module Arbalest
         let(:price) { 20 }
 
         it 'returns false' do
-          expect(subject.hit(price)).to be_false
+          expect(subject.hit?(price)).to be_false
         end
       end
 
@@ -33,7 +33,7 @@ module Arbalest
         let(:price) { 103 }
 
         it 'returns true' do
-          expect(subject.hit(price)).to be_true
+          expect(subject.hit?(price)).to be_true
         end
       end
 
@@ -41,7 +41,7 @@ module Arbalest
         let(:price) { 98 }
 
         it 'returns true' do
-          expect(subject.hit(price)).to be_true
+          expect(subject.hit?(price)).to be_true
         end
       end
     end

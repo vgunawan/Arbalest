@@ -7,7 +7,7 @@ module Arbalest
       @candlestick = candlestick
     end
     
-    def hit(target)
+    def hit?(target)
       target >= candlestick.low and target <= candlestick.high
     end
 
