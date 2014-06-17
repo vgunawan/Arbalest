@@ -45,5 +45,23 @@ module Arbalest
         end
       end
     end
+
+    describe '#==' do
+      context 'with identical values' do
+        let(:other) { Data.new(timestamp, candlestick) }
+
+        it 'returns true' do
+          expect(subject).to eq(other)
+        end
+      end
+
+      context 'with different values' do
+        let(:other) { Data.new(1, candlestick) }
+
+        it 'return false' do
+          expect(subject).to_not eq(other)
+        end
+      end
+    end
   end
 end

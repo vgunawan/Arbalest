@@ -10,5 +10,10 @@ module Arbalest
     def hit(target)
       target >= candlestick.low and target <= candlestick.high
     end
+
+    def ==(other)
+      timestamp == other.timestamp and
+      candlestick == other.candlestick
+    end
   end
 end

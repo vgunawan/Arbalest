@@ -26,11 +26,11 @@ module Arbalest
       end
 
       it("first element has timestamp") do 
-        expect(subject.data.first[:timestamp]).to eq(list.first[:timestamp])
+        expect(subject.data.first.timestamp).to eq(list.first[:timestamp])
       end
 
       it("first element has a candle") do 
-        expect(subject.data.first[:candle]).
+        expect(subject.data.first.candlestick).
           to eq(Candlestick.new(o: 170, h: 190, l: 160, c: 175))
       end
     end
@@ -56,11 +56,11 @@ module Arbalest
     let(:last_candle_timestamp) { first_of_jan + 3600 * 5 }
 
     it("first element has timestamp") do 
-      expect(subject.data.first[:timestamp]).to eq(list.first[:timestamp])
+      expect(subject.data.first.timestamp).to eq(list.first[:timestamp])
     end
 
     it("first element has a candle") do 
-      expect(subject.data.first[:candle]).to eq(first_candle)
+      expect(subject.data.first.candlestick).to eq(first_candle)
     end
 
     describe "#at" do
@@ -100,10 +100,9 @@ module Arbalest
     describe "#range" do
       it "returns candles including the boundary" do
         expected = [
-          { timestamp: first_of_jan.to_i, candle: first_candle },
-          { 
-            timestamp: (first_of_jan + 3600).to_i, 
-            candle: Candlestick.new(o: 171, h: 191, l: 161, c: 176, v: 301) }
+          Data.new(first_of_jan.to_i, first_candle),
+          Data.new(first_of_jan.to_i + 3600, 
+                   Candlestick.new(o: 171, h: 191, l: 161, c: 176, v: 301))
         ]
         expect(subject.range(first_of_jan, first_of_jan + 3600)).to eq(expected)
       end
@@ -111,7 +110,7 @@ module Arbalest
       context "with unbounded beginning" do
         let(:unbounded_start) { first_of_jan - 3600 }
         let(:expected) {
-          [ {timestamp: first_of_jan.to_i, candle: first_candle} ]
+          [ Data.new(first_of_jan.to_i, first_candle) ]
         }
 
         it "returns a new chart from start" do
@@ -122,7 +121,7 @@ module Arbalest
       context "with unbounded end" do
         let(:unbounded_end) { Time.parse("2015-01-01T00:01:00") }
         let(:expected) {
-          [ {timestamp: (first_of_jan + 3600 * 5).to_i, candle: last_candle} ]
+          [ Data.new((first_of_jan + 3600 * 5).to_i, last_candle) ]
         }
 
         it "returns a new chart to end" do
@@ -135,7 +134,7 @@ module Arbalest
     describe "#last" do
       it "returns the last data" do
         expect(subject.last).to eq(
-          [{ timestamp: last_candle_timestamp.to_i, candle: last_candle}])
+          [Data.new(last_candle_timestamp.to_i, last_candle)])
       end
 
       context "with a given time" do
@@ -143,8 +142,8 @@ module Arbalest
 
         it "returns the candles asked" do
           expect(subject.last(hour)).to eq(
-            [{ timestamp: fifth_candle_timestamp.to_i, candle: fifth_candle}, 
-             { timestamp: last_candle_timestamp.to_i, candle: last_candle}])
+            [ Data.new(fifth_candle_timestamp.to_i, fifth_candle), 
+              Data.new(last_candle_timestamp.to_i, last_candle)])
         end
       end
     end

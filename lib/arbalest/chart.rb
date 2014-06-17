@@ -9,10 +9,7 @@ module Arbalest
       @index = {}
       list.each do |e| 
         params = e.select { |k,v| [:o, :h, :l, :c, :v].include? k }
-        @data << { 
-          timestamp: e[:timestamp], 
-          candle: Candlestick.new(params) 
-        }
+        @data << Data.new(e[:timestamp], Candlestick.new(params))
       end
       rebuild_index!
     end
@@ -20,7 +17,7 @@ module Arbalest
     def at(time)
       i = nearest_index_at(time)
       return nil if i.nil?
-      data[i][:candle]
+      data[i].candlestick
     end
 
     def range(from, to)
@@ -32,7 +29,7 @@ module Arbalest
     end
 
     def last(distance=nil)
-      to = data.last[:timestamp]
+      to = data.last.timestamp
       from = distance.nil? ? to : to - distance
       range(from, to)
     end
@@ -47,7 +44,7 @@ module Arbalest
     end
 
     def elapsed?(time)
-      data.last[:timestamp] + interval > time.to_i
+      data.last.timestamp + interval > time.to_i
     end
 
     def <<(other)
@@ -69,7 +66,7 @@ module Arbalest
       prev_i = -1
       i = data.find_index do |e| 
         prev_i += 1
-        e[:timestamp] > time.to_i
+        e.timestamp > time.to_i
       end
       if i.nil?
         return prev_i unless prev_i < 0
@@ -82,7 +79,7 @@ module Arbalest
 
     def rebuild_index!
       @index.clear
-      @data.each_with_index { |v, i| @index[v[:timestamp]] = i }
+      @data.each_with_index { |v, i| @index[v.timestamp] = i }
     end
   end
 end
