@@ -192,7 +192,6 @@ module Arbalest
       let(:data) { double('data') } 
       let(:chart) { double('chart', last: [data]) }
       let(:opening_price) { 1.00 }
-      let(:stop_price) { opening_price - one_pip * stop }
       let(:direction) { :long }
 
       before do
@@ -202,6 +201,7 @@ module Arbalest
       context 'with no trail specified' do
         let(:stop) { 10 }
         let(:order) { double('order', stop: 10, trail: nil) }
+        let(:stop_price) { opening_price - one_pip * stop }
 
         it 'does not update stop' do
           subject.update_trail_stop(chart)
@@ -210,9 +210,8 @@ module Arbalest
       end
 
       context 'price moved more than the trail' do
-        let(:trail) { 5 }
         let(:expected_price) { opening_price }
-        let(:order) { double('order', one_pip: one_pip, trail: trail, stop: 5) }
+        let(:order) { double('order', one_pip: one_pip, trail: 5, stop: 5) }
         let(:high) { 1.00081 }
         let(:candle) { double('candle', high: high) }
         let(:data) { double('data', candlestick: candle) }
@@ -234,6 +233,37 @@ module Arbalest
         it 'adjust the stop' do
           subject.update_trail_stop(chart)
           expect(subject.stop_price).to eq(expected_price)
+        end
+      end
+
+      context 'short position' do
+        let(:direction) { :short }
+
+        context 'price moved more than the trail' do
+          let(:expected_price) { opening_price }
+          let(:order) { double('order', one_pip: one_pip, trail: 5, stop: 5) }
+          let(:low) { 0.99919 }
+          let(:candle) { double('candle', low: low) }
+          let(:data) { double('data', candlestick: candle) }
+
+          it 'adjust the stop' do
+            subject.update_trail_stop(chart)
+            expect(subject.stop_price).to eq(expected_price)
+          end
+        end
+
+        context 'price moved more than twice the trail' do
+          let(:trail) { 5 }
+          let(:expected_price) { opening_price - trail * one_pip }
+          let(:order) { double('order', one_pip: one_pip, trail: trail, stop: 5) }
+          let(:low) { 0.99899 }
+          let(:candle) { double('candle', low: low) }
+          let(:data) { double('data', candlestick: candle) }
+
+          it 'adjust the stop' do
+            subject.update_trail_stop(chart)
+            expect(subject.stop_price).to eq(expected_price)
+          end
         end
       end
     end

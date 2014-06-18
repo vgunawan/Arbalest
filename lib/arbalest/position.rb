@@ -1,5 +1,7 @@
 module Arbalest
   class Position
+    PRECISION = 5
+
     attr_reader :pair, :direction, :closing_price, :order
     attr_reader :opening_price, :time, :status, :strategy
     
@@ -45,12 +47,13 @@ module Arbalest
       last_candle = chart.last.first.candlestick
       one_pip = order.one_pip
       trail = order.trail
+      op = (direction == :long) ? :+ : :-
+      hl = (direction == :long) ? :high : :low
 
-      if direction == :long
-        delta = (last_candle.high - opening_price) / one_pip
-        @stop_price = stop_price + (delta.floor / trail).to_i * trail * one_pip
-      else
-      end
+      delta = (opening_price - last_candle.send(hl)).abs / one_pip
+      trail_move = (delta.floor / trail).to_i * trail * one_pip
+
+      @stop_price = stop_price.send(op, trail_move).round(PRECISION)
     end
 
     private
