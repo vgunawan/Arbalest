@@ -118,7 +118,7 @@ module Arbalest
 
       context 'with a long position' do
         let(:stop) { 10 }
-        let(:stop_price) { opening_price - one_pip * stop }
+        let(:stop_price) { (opening_price - one_pip * stop).round(5) }
         let(:direction) { :long }
 
         before do
@@ -175,7 +175,7 @@ module Arbalest
 
       context 'with short position' do
         let(:limit) { 10 }
-        let(:limit_price) { opening_price - one_pip * limit }
+        let(:limit_price) { (opening_price - one_pip * limit).round(5) }
         let(:direction) { :short }
         
         before do

@@ -22,13 +22,13 @@ module Arbalest
     def stop_price
       return nil unless order.stop
       op = (direction == :long) ? :- : :+
-      @stop_price ||= opening_price.send(op, pair.one_pip * order.stop)
+      @stop_price ||= opening_price.send(op, pair.one_pip * order.stop).round(PRECISION)
     end
 
     def limit_price
       return nil unless order.limit
       op = (direction == :long) ? :+ : :-
-      @limit_price ||= opening_price.send(op, pair.one_pip * order.limit)
+      @limit_price ||= opening_price.send(op, pair.one_pip * order.limit).round(PRECISION)
     end
 
     def close_if_hit!(chart)
