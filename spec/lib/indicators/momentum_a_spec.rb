@@ -18,9 +18,9 @@ module Arbalest::Indicators
     context "not enough momentum" do
       let(:data) do
         [
-          { timestamp: timestamp(0), candlestick: Candlestick.new(o: 10, h: 20, l: 9, c: 12)},
-          { timestamp: timestamp(11), candlestick: Candlestick.new(o: 12, h: 20, l: 9, c: 12)},
-          { timestamp: timestamp(23), candlestick: Candlestick.new(o: 10, h: 20, l: 5, c: 8)},
+          Arbalest::Data.new(timestamp(0), Candlestick.new(o: 10, h: 20, l: 9, c: 12)),
+          Arbalest::Data.new(timestamp(11), Candlestick.new(o: 12, h: 20, l: 9, c: 12)),
+          Arbalest::Data.new(timestamp(23), Candlestick.new(o: 10, h: 20, l: 5, c: 8)),
         ]
       end
 
@@ -33,15 +33,15 @@ module Arbalest::Indicators
       let(:closing_price) { 23 }
       let(:data) do
         [
-          { timestamp: timestamp(0), candlestick: Candlestick.new(o: 10, h: 20, l: 9, c: 12)},
-          { timestamp: timestamp(11), candlestick: Candlestick.new(o: 12, h: 20, l: 9, c: 12)},
-          { timestamp: timestamp(23), 
-            candlestick: Candlestick.new(o: 15, h: 25, l: 10, c: closing_price)},
+          Arbalest::Data.new(timestamp(0), Candlestick.new(o: 10, h: 20, l: 9, c: 12)),
+          Arbalest::Data.new(timestamp(11), Candlestick.new(o: 12, h: 20, l: 9, c: 12)),
+          Arbalest::Data.new(timestamp(23), 
+                             Candlestick.new(o: 15, h: 25, l: 10, c: closing_price)),
         ]
       end
 
       it "returns a long order" do
-        expect(@order).to eq({ long: closing_price })
+        expect(@order).to eq({ long: closing_price, at: timestamp(23) })
       end
 
     end
