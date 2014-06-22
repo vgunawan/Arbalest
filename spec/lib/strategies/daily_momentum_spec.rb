@@ -81,7 +81,8 @@ module Arbalest
 
           context "with new order from indicators" do
             let(:short_level) { 91.32 }
-            let(:short_order) { { short: short_level } }
+            let(:time) { double('time') }
+            let(:short_order) { { short: short_level, at: time } }
 
             before do
               Indicators::MomentumA.should_receive(:calculate).and_return(short_order)
@@ -89,7 +90,7 @@ module Arbalest
             end
 
             it 'returns new short order' do
-              order = Order.new(nil, short_level, 8 * 60, limit_h, stop, trail)
+              order = Order.new(nil, short_level, 8 * 60, limit_h, stop, trail, time)
               expect(@new_orders).to eq(order)
             end
           end

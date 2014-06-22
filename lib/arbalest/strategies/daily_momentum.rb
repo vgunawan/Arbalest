@@ -54,7 +54,7 @@ module Arbalest
 
       def order_to_open(suggestions)
         s = suggestions.first
-        Order.new(s[:long], s[:short], eight_hours, limit_h, stop, trail)
+        Order.new(s[:long], s[:short], eight_hours, limit_h, stop, trail, s[:at])
       end
     end
   end

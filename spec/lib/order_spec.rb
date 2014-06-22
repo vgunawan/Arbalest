@@ -6,8 +6,9 @@ module Arbalest
     let(:limit) { 30 }
     let(:stop) { 15 }
     let(:trail) { 10 }
+    let(:at) { Time.parse('2014-01-01T13:00') }
     
-    subject { Order.new(long, short, time_limit, limit, stop, trail) }
+    subject { Order.new(long, short, time_limit, limit, stop, trail, at) }
 
     it('long') { expect(subject.long).to eq(long) }
     it('short') { expect(subject.short).to eq(short) }
@@ -15,15 +16,16 @@ module Arbalest
     it('limit') { expect(subject.limit).to eq(limit) }
     it('stop') { expect(subject.stop).to eq(stop) }
     it('trail') { expect(subject.trail).to eq(trail) }
+    it('at') { expect(subject.at).to eq(at) }
 
     describe '==' do
       it('equals') do
-        test = subject
+        test = Order.new(long, short, time_limit, limit, stop, trail, at)
         expect(subject).to eq(test)
       end
 
       it('not equals') do 
-        test = Order.new(long, short, 60, limit, stop, trail)
+        test = Order.new(long, short, 60, limit, stop, trail, at)
         expect(subject).to_not eq(test)
       end
     end
