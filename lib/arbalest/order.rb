@@ -2,7 +2,7 @@ module Arbalest
   class Order
     attr_reader :long, :short, :time_limit, :limit, :stop, :trail, :at
 
-    def initialize(long, short, time_limit, limit, stop, trail, at)
+    def initialize(long, short, at, time_limit: nil, limit: nil, stop: nil, trail: nil)
       @long = long
       @short = short
       @time_limit = time_limit
@@ -18,7 +18,8 @@ module Arbalest
       time_limit == other.time_limit and
       limit == other.limit and
       stop == other.stop and
-      trail == trail
+      trail == trail and
+      at == at
     end
   end
 end

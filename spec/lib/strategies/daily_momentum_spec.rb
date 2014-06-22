@@ -90,7 +90,8 @@ module Arbalest
             end
 
             it 'returns new short order' do
-              order = Order.new(nil, short_level, 8 * 60, limit_h, stop, trail, time)
+              order = Order.new(nil, short_level, time, time_limit:  8 * 60, 
+                                limit: limit_h, stop: stop, trail: trail )
               expect(@new_orders).to eq(order)
             end
           end
