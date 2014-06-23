@@ -37,7 +37,7 @@ module Arbalest
       working_orders.delete_if do |order|
         return false if order.pair != chart.pair
 
-        p = order.fill(chart.last)
+        p = order.fill(chart.last[0])
         unless p.nil?
           positions << p 
           return true
