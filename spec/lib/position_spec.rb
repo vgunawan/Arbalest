@@ -18,6 +18,24 @@ module Arbalest
     it("status") { expect(subject.status).to eq(:open) }
     it('order') { expect(subject.order).to eq(order) }
 
+    describe '==' do
+      context 'equals' do
+        let(:other) { Position.new(pair, direction, opening_price, time, order) }
+        
+        it 'returns true' do
+          expect(subject).to eq(other)
+        end
+      end
+
+      context 'not equals' do
+        let(:other) { Position.new(pair, :short, opening_price, time, order) }
+
+        it 'returns false' do
+          expect(subject).to_not eq(other)
+        end
+      end
+    end
+
     describe "#close" do
       let(:status) { :test_status }
       let(:closing_price) { 1.00 }

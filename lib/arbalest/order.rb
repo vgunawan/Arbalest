@@ -13,6 +13,13 @@ module Arbalest
       @at = at
     end
 
+    def fill(data)
+      positions = []
+      positions <<  new_position(:long, long, data.timestamp) if data.hit?(long)
+      positions <<  new_position(:short, short, data.timestamp) if data.hit?(short)
+      positions
+    end
+
     def ==(other)
       pair == other.pair and
       long == other.long and 
@@ -22,6 +29,11 @@ module Arbalest
       stop == other.stop and
       trail == trail and
       at == at
+    end
+    
+    private
+    def new_position(direction, price, timestamp)
+      Position.new(pair, direction, price, timestamp, self)
     end
   end
 end

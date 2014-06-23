@@ -23,6 +23,37 @@ module Arbalest
     it('trail') { expect(subject.trail).to eq(trail) }
     it('at') { expect(subject.at).to eq(at) }
 
+    describe '#fill' do
+      let(:timestamp) { 1 } 
+      let(:data) { double('data', timestamp: timestamp) }
+      let(:expected_long) { Position.new(pair, :short, short, timestamp, subject) }
+      let(:expected_short) { Position.new(pair, :long, long, timestamp, subject) }
+
+      it 'successfully on short side' do
+        allow(data).to receive(:hit?).with(long).and_return(false)
+        allow(data).to receive(:hit?).with(short).and_return(true)
+        expect(subject.fill(data).first).to eq(expected_long)
+      end
+      
+      it 'successfully on long side' do
+        allow(data).to receive(:hit?).with(long).and_return(true)
+        allow(data).to receive(:hit?).with(short).and_return(false)
+        expect(subject.fill(data).first).to eq(expected_short)
+      end
+
+      it 'successfully on both long and short' do
+        allow(data).to receive(:hit?).with(long).and_return(true)
+        allow(data).to receive(:hit?).with(short).and_return(true)
+        expect(subject.fill(data)).to eq([expected_short, expected_long])
+      end
+
+      it 'not succesful' do
+        allow(data).to receive(:hit?).with(long).and_return(false)
+        allow(data).to receive(:hit?).with(short).and_return(false)
+        expect(subject.fill(data)).to be_empty
+      end
+    end
+
     describe '==' do
       it('equals') do
         test = Order.new(pair, long, short, at, time_limit: time_limit, limit: limit, stop: 

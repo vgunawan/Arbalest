@@ -56,6 +56,15 @@ module Arbalest
       @stop_price = stop_price.send(op, trail_move).round(PRECISION)
     end
 
+    def ==(other)
+      pair == other.pair and
+      direction == other.direction and
+      opening_price == other.opening_price and
+      time == time and
+      status == status and
+      order == order
+    end
+
     private
     def time_limit
       time + order.time_limit
