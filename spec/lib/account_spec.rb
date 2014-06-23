@@ -129,6 +129,17 @@ module Arbalest
             expect(positions).to have_received(:<<).with(new_position)
           end
         end
+
+        context 'unmatched' do
+          let(:working_order) { 
+            double('working_order', pair: pair, matched?: true, fill: nil) }
+          let(:new_position) { double('new_position') }
+
+          it 'adds order to the positions list' do
+            subject.manage_positions(chart)
+            expect(positions).to_not have_received(:<<).with(new_position)
+          end
+        end
       end
     end
   end
