@@ -25,20 +25,22 @@ module Arbalest
     end
 
     describe '#manage_positions' do
+      let(:history) { subject.history }
+      let(:positions) { subject.positions }
+      let(:working_orders) { subject.working_orders }
+      let(:chart) { double('chart', pair: pair, last: [last_data]) }
+      let(:last_data) do
+        {
+          :candlestick => last_candle
+        }
+      end
+      let(:last_candle) { double('candlestick') }
+
       describe 'existings' do
         let(:pair) { double('audjpy') }
-        let(:history) { subject.history }
-        let(:positions) { subject.positions }
         let(:open_position_pair) { pair }
         let(:open_position) { double('open position', pair: open_position_pair) }
         let(:closing_price) { double('100') }
-        let(:last_candle) { double('candlestick') }
-        let(:last_data) do
-          {
-            :candlestick => last_candle
-          }
-        end
-        let(:chart) { double('chart', pair: pair, last: [last_data]) }
 
         before do
           positions.stub(:delete_if).and_yield(open_position).and_return([open_position])
@@ -77,6 +79,9 @@ module Arbalest
         end
 
         context 'position closed' do
+          let(:open_position_pair) { pair }
+          let(:open_position) { double('open position', pair: open_position_pair) }
+
           before do
             allow(open_position).to receive(:close_if_hit!).with(chart).and_return(true)
             subject.manage_positions(chart)
@@ -93,6 +98,37 @@ module Arbalest
       end
 
       describe 'open orders' do
+        let(:pair) { double('audjpy') }
+
+        before do
+          allow(positions).to receive(:delete_if)
+          allow(positions).to receive(:<<)
+          allow(working_orders).to receive(:delete_if).and_yield(working_order)
+        end
+
+        context 'different pair' do
+          let(:working_order) { double('working_order', pair: double('eurusd')) }
+
+          before do
+            allow(working_order).to receive(:matched?)
+          end
+
+          it 'does nothing' do
+            subject.manage_positions(chart)
+            expect(working_order).to_not have_received(:matched?)
+          end
+        end
+
+        context 'matched' do
+          let(:working_order) { 
+            double('working_order', pair: pair, matched?: true, fill: new_position) }
+          let(:new_position) { double('new_position') }
+
+          it 'adds order to the positions list' do
+            subject.manage_positions(chart)
+            expect(positions).to have_received(:<<).with(new_position)
+          end
+        end
       end
     end
   end

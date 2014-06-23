@@ -1,9 +1,10 @@
 module Arbalest
   module Strategies
     class DailyMomentum
-      attr_reader :stop, :limit_l, :limit_h, :trail, :signal_pips
+      attr_reader :pair, :stop, :limit_l, :limit_h, :trail, :signal_pips
 
-      def initialize(stop: 15, limit_l: 15, limit_h: 30, signal_pips: 40, trail: 10)
+      def initialize(pair, stop: 15, limit_l: 15, limit_h: 30, signal_pips: 40, trail: 10)
+        @pair = pair
         @stop = stop
         @limit_l = limit_l
         @limit_h = limit_h
@@ -54,7 +55,7 @@ module Arbalest
 
       def order_to_open(suggestions)
         s = suggestions.first
-        Order.new(s[:long], s[:short], s[:at], time_limit: eight_hours, 
+        Order.new(pair, s[:long], s[:short], s[:at], time_limit: eight_hours, 
                   limit: limit_h, stop: stop, trail: trail)
       end
     end

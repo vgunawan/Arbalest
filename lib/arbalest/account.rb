@@ -15,6 +15,7 @@ module Arbalest
 
     def manage_positions(chart)
       manage_existings(chart)
+      match_working_orders(chart)
     end
 
     private
@@ -29,6 +30,19 @@ module Arbalest
           pos.update_trail_stop(chart)
           return false
         end
+      end
+    end
+
+    def match_working_orders(chart)
+      working_orders.delete_if do |order|
+        return false if order.pair != chart.pair
+
+        p = order.fill(chart)
+        unless p.nil?
+          positions << p 
+          return true
+        end
+        false
       end
     end
   end

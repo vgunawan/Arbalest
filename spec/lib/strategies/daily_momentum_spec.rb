@@ -4,6 +4,7 @@ module Arbalest
   module Strategies
     describe DailyMomentum do
       describe "#manage" do
+        let(:pair) { double('eurusd') }
         let(:account) { double('cfd_account')}
         let(:stop) { 15 }
         let(:limit_l) { 20 }
@@ -19,7 +20,7 @@ module Arbalest
         }}
         let(:chart) { double('audusd') }
 
-        subject { DailyMomentum.new(settings) }
+        subject { DailyMomentum.new(pair, settings) }
 
         it("stop") { expect(subject.stop).to eq(stop) }
         it("limit_l") { expect(subject.limit_l).to eq(limit_l) }
@@ -90,7 +91,7 @@ module Arbalest
             end
 
             it 'returns new short order' do
-              order = Order.new(nil, short_level, time, time_limit:  8 * 60, 
+              order = Order.new(pair, nil, short_level, time, time_limit:  8 * 60, 
                                 limit: limit_h, stop: stop, trail: trail )
               expect(@new_orders).to eq(order)
             end
