@@ -102,7 +102,7 @@ module Arbalest
 
         before do
           allow(positions).to receive(:delete_if)
-          allow(positions).to receive(:<<)
+          allow(positions).to receive(:+)
           allow(working_orders).to receive(:delete_if).and_yield(working_order)
         end
 
@@ -122,22 +122,21 @@ module Arbalest
         context 'matched' do
           let(:working_order) { 
             double('working_order', pair: pair, matched?: true, fill: new_position) }
-          let(:new_position) { double('new_position') }
+          let(:new_position) { [double('new_position')] }
 
           it 'adds order to the positions list' do
             subject.manage_positions(chart)
-            expect(positions).to have_received(:<<).with(new_position)
+            expect(positions).to have_received(:+).with(new_position)
           end
         end
 
         context 'unmatched' do
           let(:working_order) { 
             double('working_order', pair: pair, matched?: true, fill: nil) }
-          let(:new_position) { double('new_position') }
 
           it 'adds order to the positions list' do
             subject.manage_positions(chart)
-            expect(positions).to_not have_received(:<<).with(new_position)
+            expect(positions).to_not have_received(:+)
           end
         end
       end

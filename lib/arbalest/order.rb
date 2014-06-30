@@ -15,8 +15,8 @@ module Arbalest
 
     def fill(data)
       positions = []
-      positions <<  new_position(:long, long, data.timestamp) if data.hit?(long)
-      positions <<  new_position(:short, short, data.timestamp) if data.hit?(short)
+      positions << new_position(:long, long, data.timestamp) if data.hit?(long)
+      positions << new_position(:short, short, data.timestamp) if data.hit?(short)
       positions
     end
 

@@ -39,7 +39,7 @@ module Arbalest
 
         p = order.fill(chart.last[0])
         unless p.nil?
-          positions << p 
+          @positions += p 
           return true
         end
         false
